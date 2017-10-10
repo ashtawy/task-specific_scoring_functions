@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 import argparse
 from sklearn import metrics
 import pandas as pd
@@ -8,6 +10,7 @@ from read_plc_data import read_plc_data
 from model_utils import train_test_model
 import os
 import sys
+import multiprocessing
 #-------------------------------------------------------------------------------
 def parse_and_process_args():
     description = """ Train and test task-specific SFs"""
@@ -36,6 +39,13 @@ def parse_and_process_args():
                   statistics of the task-specific SF are saved.    
                   """,
         type = str)
+
+    parser.add_argument('--n_cpus', required = False,  
+        default=None,
+        help = """The number of CPU cores to use. All CPU cores will
+                  be used if it was not assigned.    
+                  """,
+        type = int)
     parser.add_argument("--verbose", help="increase output verbosity",
                         action="store_true")
     args = parser.parse_args()
@@ -89,6 +99,7 @@ def main():
     elif sfname == 'x-score':
       descriptor_sets = ['xscore'] 
     rem_y = sfname in ['rf-score', 'x-score']
+    
     model_params = {'n_trees': 3000, 'depth': 10,
                     'eta': 0.01, 'l_rate': 0.01}
     
@@ -104,7 +115,9 @@ def main():
     if ((sfname in ['rf-score', 'x-score'])
         or (sfname == 'bt-score' and task != 'score')):
       train = get_ba_data(train, task)
-    predictions, performance = train_test_model(task, sfname, train, test)
+    n_cpus = multiprocessing.cpu_count() if args.n_cpus is None else args.n_cpus
+    model_params = {'n_cpus': n_cpus}
+    predictions, performance = train_test_model(task, sfname, train, test, model_params)
     print('\nPerformance of %s on the %sing task:'%(args.sfname, args.task))
     print(performance.to_string(index=False))
     if preds_ofname is not None:

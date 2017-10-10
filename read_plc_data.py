@@ -63,11 +63,11 @@ def read_plc_data(task, descriptor_sets, rem_y=False,
         ds_fname_gzip = ds_fname + '.gzip'
         if os.path.exists(ds_fname):
             if verbose:
-                print('Now reading: ', ds_fname)
+                print('Now reading: %s'%(ds_fname))
             x_ds = pd.read_csv(ds_fname)
         elif os.path.exists(ds_fname_gzip):
             if verbose:
-                print('Now reading: ', ds_fname_gzip)
+                print('Now reading: %s'%(ds_fname_gzip))
             x_ds = pd.read_csv(ds_fname_gzip, compression='gzip')
         else:
             print('ERROR: UNABLE TO FIND ANY OF:')

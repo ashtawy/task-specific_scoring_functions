@@ -47,7 +47,7 @@ def compute_screening_power(target_id, true_labels, pred_labels, decreasing=True
                 s10 = s10 + 1 if ntb10 > 0 else s10
                 cntr = cntr + 1.0
     res = [ef1/cntr, ef5/cntr, ef10/cntr, s1, s1/cntr, s5, s5/cntr, s10, s10/cntr]
-    res = list(np.round(np.array(res), 3))
+    res = list(np.round(np.array(res), 2))
     """
     print('EF1% = ' + str(res[0]) + ', EF5% = ' + str(res[1]) + ', EF10% = ' + str(res[2]))
     print('S1 = ' + str(res[3]) + ', S1% = ' + str(100.0*res[4]))
@@ -114,8 +114,8 @@ def compute_docking_power(ligand_id, true_rmsds, pred_labels, decreasing=False):
     r[9] = 0 if(r0n==0) else r[9]/r0n
     r[10] = 0 if(r0n==0) else r[10]/r0n
 
-    """
     r = list(np.round(np.array(r)*100.0,2))
+    """
     print('S11 = %.2f, S21 = %.2f, S31 = %.2f'%(r[0], r[1], r[2]))
     print('S21_wo_native = %.2f, S22 = %.2f, S23 = %.2f'%(r[3], r[6], r[7]))
     print('S01 = %.2f, S03 = %.2f, S05 = %.2f'%(r[8], r[9], r[10]))

@@ -1,2 +1,2 @@
-n_tr,n_ts,n_descriptors,Rp,Rs,SD,RMSE
-3000.0,195.0,216.0,0.725,0.729,1.611,1.603
+N_Training,N_Test,N_Descriptors,Rp,Rs,SD,RMSE
+3000,195,216,0.725,0.729,1.611,1.603

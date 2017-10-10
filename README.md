@@ -9,15 +9,15 @@ This repository provides Python scripts for building task-specific scoring funct
 - **BT-Dock**: a boosted-tree docking model fitted to a large number of native and computer-generated ligand conformations and then optimized to predict binding poses explicitly. The model has shown an average of 25% improvement over its BA-based counterparts in different pose prediction scenarios.
 - **BT-Screen**: a screening SF that directly models ligand activity as a classification problem. BT-Screen is fitted to thousands of active and inactive protein-ligand complexes to optimize it for finding real actives from databases of ligands not seen in its training set. Our results suggest that BT-Screen can be 73% more accurate than the best conventional SF in enriching datasets of active and inactive ligands for many protein targets.
 
-# Installation
+# Download & Installation
 The scripts provided here are written in Python. Therefore, Python 3.X or 2.7 must be available on the machine (Linux) to run them. The following modules are required before running the script:
-- Numpy.
-- Scipy.
-- Pandas.
-- Scikit-learn.
-- XGBoost.
+- Numpy (version 1.11.1)
+- Scipy (0.18.1)
+- Pandas (0.18.1)
+- Scikit-learn (0.18.1)
+- XGBoost (0.6).
 
-Then download the project from here [] and simply unzip it.
+Then download the project from [here] (https://github.com/ashtawy/task-specific_scoring_functions/archive/master.zip) and simply unzip it. Then change directory (cd) to */path/to/task-specific_scoring_functions/* in order to train and test task-specific scoring functions. 
 
 # Train and Test Task-Specific & Conventional Scoring Functions
 With one command, you could train and test a task-specific (BT-Score, BT-Dock, and BT-Screen) or generic scoring functions (RF-Score and X-Score). For example, the following command shows how to build BT-Score for the ligand scoring task (predicting binding affinity):
@@ -56,7 +56,8 @@ Our training and validation datasets are obtained from [PDBbind (versions 2007 &
         *   [screen](./data/input/screen)
         *   [score](./data/input/score)
 
-# Research project
-The set of task-specific scoring functions hosted here is joint work with my PhD advisor [Prof. Nihar R. Mahapatra](http://www.egr.msu.edu/~nrm) at Michigan State University.
+# Contributors
+* [Hossam M. Ashtawy](http://www.ashtawy.com)
+* [Nihar R. Mahapatra](http://www.egr.msu.edu/~nrm)
 
 

@@ -1,3 +1,5 @@
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 import os
 import numpy as np
 import pandas as pd
@@ -10,7 +12,7 @@ from sklearn.ensemble import RandomForestRegressor
 import timeit
 import random
 #-------------------------------------------------------------------------------
-def train_test_model(task, sf_name, tr_d, ts_d):
+def train_test_model(task, sf_name, tr_d, ts_d, model_params):
     pred_task = 'classification' if sf_name == 'bt-screen' else 'regression'
     tr_d = shuffle_data(tr_d, sf_name)
     tr_grp_id = tr_d['grp_ids'].values
@@ -19,7 +21,6 @@ def train_test_model(task, sf_name, tr_d, ts_d):
     tr_x = tr_x_df.values
     ftr_names = tr_x_df.columns.tolist()
     tr_y = tr_d['label'].values
-    model_params = None
     ts_grp_id = ts_d['grp_ids'].values
     ts_clstr_id = ts_d['clstr_ids'].values
     predictions_df = ts_d[['grp_ids', 'label']].copy()
@@ -122,14 +123,14 @@ def train_xgb(model_params, tr_x, tr_y, pred_task):
                  #'bst:colsample_bytree':0.75,
                  'bst:colsample_bylevel':0.75,
                  'bst:subsample':subsample, 'silent':1, 
-                 'nthread':8}
+                 'nthread':model_params['n_cpus']}
     else:
         param = {'bst:max_depth':10, 'bst:eta':0.035, # for docking s = .3, eta =.035, m.d. = 5, learning_rate = 0.05
                  'learning_rate':0.02, 'gamma':0, # for scoring s = .6, eta =.025, m.d. = 10, learning_rate = 0.02
                  #'bst:colsample_bytree':0.75,
                  'bst:colsample_bylevel':0.75,
                  'bst:subsample':subsample, 'silent':1, 
-                 'nthread':8}
+                 'nthread':model_params['n_cpus']}
 
     if pred_task == 'regression':
         param['eval_metric'] = 'rmse'
@@ -150,10 +151,18 @@ def train_sk_rf(model_params, tr_x, tr_y):
     n_tr_x = tr_x.shape[0]
     subsample_max = 15000.0/n_tr_x
     subsample = min(0.6, subsample_max)
-    model = RandomForestRegressor(n_estimators=3000, max_depth=None, 
-                                  subsample=subsample,
-                                  random_state=0, n_jobs=8, oob_score=True,
-                                  verbose=0)
+    n_cpus = model_params['n_cpus']
+    try:
+        # Version 0.18.1 takes in the subsample parameter
+        model = RandomForestRegressor(n_estimators=3000, max_depth=None, 
+                                      subsample=subsample,
+                                      random_state=0, n_jobs=n_cpus, oob_score=False,
+                                      verbose=0)
+    except:
+        # Version 0.19 and higher does not take the subsample parameter
+        model = RandomForestRegressor(n_estimators=3000, max_depth=None, 
+                              random_state=0, n_jobs=n_cpus, oob_score=False,
+                              verbose=0)
     model.fit(tr_x, tr_y.ravel())
     return model
 #-------------------------------------------------------------------------------
