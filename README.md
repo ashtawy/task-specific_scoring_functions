@@ -17,7 +17,7 @@ The scripts provided here are written in Python. Therefore, Python 3.X or 2.7 mu
 - Scikit-learn (0.18.1)
 - XGBoost (0.6).
 
-Then [download the project](https://github.com/ashtawy/task-specific_scoring_functions/archive/master.zip), unzip it, and go to its directory *cd /path/to/task-specific_scoring_functions/* in order to train and test task-specific scoring functions. 
+Then [download the project](https://github.com/ashtawy/task-specific_scoring_functions/archive/master.zip), unzip it, and go to its directory (*$cd /path/to/task-specific_scoring_functions/*) in order to train and test task-specific scoring functions. 
 
 # Train and Test Task-Specific & Conventional Scoring Functions
 With one command, you could train and test a task-specific (BT-Score, BT-Dock, and BT-Screen) or generic scoring functions (RF-Score and X-Score). For example, the following command shows how to build BT-Score for the ligand scoring task (predicting binding affinity):
